@@ -1,0 +1,9 @@
+services:
+  fastapi:
+    build: .
+    volumes:
+      - ./src/grpc:/app/src/grpc  # <-- Mountet nur grpc-Ordner!
+    container_name: fastapi-app
+    ports:
+      - "8000:8000"
+    restart: always

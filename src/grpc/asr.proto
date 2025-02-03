@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package grpc;
+
+// Hauptservice für ASR-Verarbeitung (Nur Echtzeit!)
+service ASR {
+  rpc StreamAudio(stream AudioChunk) returns (stream AudioUpdate);
+  rpc ControlASR(ControlRequest) returns (ControlResponse);
+}
+
+// Sitzungs- und Audio-Metadaten für Echtzeit-Spracherkennung
+message ASRSession {
+  string session_id = 1;
+  string codec = 2;           
+  int32 sample_rate = 3;      
+  int32 channels = 4;         
+  bool noise_suppression = 5;
+  bool voice_activity_detection = 6;
+  bool local_transcription = 7;
+}
+
+// Echtzeit-Streaming-Audio (Telefonie)
+message AudioChunk {
+  ASRSession metadata = 1;
+  bytes compressed_audio_chunk = 2;
+}
+
+// Antwort auf Echtzeit-Transkription
+message AudioUpdate {
+  repeated WordUpdate words = 1;
+  SentimentAnalysis sentiment = 2;
+  SalesIntent intent = 3;
+}
+
+// Wort-Update-Struktur (Minimale Bandbreite durch Differenz-Streaming)
+message WordUpdate {
+  string word = 1;
+  float confidence = 2;
+  int32 start_time = 3;
+  int32 end_time = 4;
+  bool is_final = 5;
+}
+
+// Stimmungsanalyse (Echtzeit!)
+message SentimentAnalysis {
+  enum Emotion {
+    NEUTRAL = 0;
+    POSITIVE = 1;
+    NEGATIVE = 2;
+    UNCERTAIN = 3;
+    INTERESTED = 4;
+    BORED = 5;
+  }
+  Emotion emotion = 1;
+  float confidence = 2;
+}
+
+// Verkaufsabsicht (Echtzeit)
+message SalesIntent {
+  enum Intent {
+    UNSURE = 0;
+    ASKING_QUESTIONS = 1;
+    CONSIDERING = 2;
+    REJECTING = 3;
+    BUYING = 4;
+  }
+  Intent intent = 1;
+  float confidence = 2;
+}
+
+// Echtzeit-Steuerung des ASR-Prozesses
+message ControlRequest {
+  string session_id = 1;
+  string action = 2;
+  float confidence_threshold = 3;
+}
+
+// Antwort auf Steueranfragen
+message ControlResponse {
+  string status = 1;
+}

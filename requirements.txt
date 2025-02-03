@@ -1,0 +1,40 @@
+# Backend (FastAPI für API)
+fastapi>=0.115.8
+uvicorn>=0.34.0
+
+# Künstliche Intelligenz (ASR, NLU, TTS)
+openai>=1.61.0  # GPT-4 für Intent-Erkennung
+elevenlabs>=1.50.6  # TTS-Synthese mit natürlicher Stimme
+
+# NVIDIA Riva (Speech-to-Text, nur falls Server mit NVIDIA-GPU genutzt wird)
+nvidia-riva-client>=2.18.0  # Falls du die Riva API nutzt
+
+# Telefonie (Twilio/Asterisk)
+twilio>=9.4.4  # API für eingehende/ausgehende Anrufe
+asterisk-ami>=0.1.7  # Falls du Asterisk statt Twilio nutzt
+
+# Datenbank & ORM (PostgreSQL/MongoDB)
+sqlalchemy>=2.0.37  # ORM für relationale Datenbanken
+pymongo>=4.11  # Falls du MongoDB nutzen willst
+psycopg2-binary>=2.9.10  # PostgreSQL-Anbindung (psycopg2 ersetzt!)
+
+# Automatisierung & Workflows (Make.com/N8N Alternativen)
+langchain>=0.3.17  # Für komplexe Dialogflüsse und Kontextverwaltung
+
+# Deployment & Konfiguration
+python-dotenv>=1.0.1  # Lädt Umgebungsvariablen aus einer .env-Datei
+gunicorn>=23.0.0  # Für stabilen API-Server-Betrieb
+
+# Logging & Fehlerbehandlung
+loguru>=0.7.3  # Besseres Logging als das Standard-Logging-Modul
+
+# Testen & Debugging
+pytest>=8.3.4  # Unit-Tests
+httpx>=0.28.1  # HTTP-Tests für FastAPI
+
+grpcio
+grpcio-tools
+
+# Fehlerhafte oder problematische Pakete entfernt:
+# - `absl-py`: Wird von Rasa nicht mehr benötigt.
+# - Alte `rasa`-Version ersetzt durch eine neuere Version.
