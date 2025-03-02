@@ -1,6 +1,7 @@
 # Backend (FastAPI für API)
 fastapi>=0.115.8
 uvicorn>=0.34.0
+python-multipart
 
 # Künstliche Intelligenz (ASR, NLU, TTS)
 openai>=1.61.0  # GPT-4 für Intent-Erkennung
