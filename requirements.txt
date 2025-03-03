@@ -6,9 +6,10 @@ python-multipart
 # Künstliche Intelligenz (ASR, NLU, TTS)
 openai>=1.61.0  # GPT-4 für Intent-Erkennung
 elevenlabs>=1.50.6  # TTS-Synthese mit natürlicher Stimme
+deepgram-sdk>=3.2.0  # Deepgram für Speech-to-Text (Echtzeit-Transkription)
 
 # NVIDIA Riva (Speech-to-Text, nur falls Server mit NVIDIA-GPU genutzt wird)
-nvidia-riva-client>=2.18.0  # Falls du die Riva API nutzt
+# nvidia-riva-client>=2.18.0  # Auskommentiert, da aktuell nicht genutzt
 
 # Telefonie (Twilio/Asterisk)
 twilio>=9.4.4  # API für eingehende/ausgehende Anrufe
@@ -33,8 +34,13 @@ loguru>=0.7.3  # Besseres Logging als das Standard-Logging-Modul
 pytest>=8.3.4  # Unit-Tests
 httpx>=0.28.1  # HTTP-Tests für FastAPI
 
+# gRPC-Abhängigkeiten (für zukünftige Riva-Integration)
 grpcio
 grpcio-tools
+
+# Zusätzliche Abhängigkeiten für Deepgram
+asyncio>=3.4.3  # Für asynchrone Verarbeitung
+websockets>=12.0  # Für WebSocket-Unterstützung
 
 # Fehlerhafte oder problematische Pakete entfernt:
 # - `absl-py`: Wird von Rasa nicht mehr benötigt.

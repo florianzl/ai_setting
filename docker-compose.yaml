@@ -6,3 +6,11 @@ services:
     container_name: booking_ai_agent
     ports:
       - "8000:8000"
+    volumes:
+    - ./src:/app/src
+    env_file:
+      - .env
+    environment:
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - ELEVENLABS_VOICE_ID=${ELEVENLABS_VOICE_ID}
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload

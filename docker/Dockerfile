@@ -4,6 +4,11 @@ FROM python:3.11-slim
 # Arbeitsverzeichnis setzen
 WORKDIR /app
 
+# Systemabhängigkeiten installieren (für Audioverarbeitung)
+RUN apt-get update && apt-get install -y \
+    libsndfile1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Abhängigkeiten kopieren und installieren
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

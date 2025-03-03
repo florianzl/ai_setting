@@ -6,6 +6,8 @@ from src.api.routes.health import router as health_router  # falls vorhanden
 from src.api.routes.voice import router as voice_router
 from src.api.routes.twilio_media import router as twilio_media_router
 from src.api.routes.audio import router as audio_router
+from src.api.routes.outbound import router as outbound_router
+from src.api.routes.play_audio import router as play_audio_router
 
 app = FastAPI(title="Booking AI Agent", version="0.1.0")
 
@@ -14,6 +16,8 @@ app.include_router(health_router)
 app.include_router(voice_router)
 app.include_router(twilio_media_router)
 app.include_router(audio_router)
+app.include_router(outbound_router)
+app.include_router(play_audio_router)
 
 if __name__ == "__main__":
     import uvicorn
