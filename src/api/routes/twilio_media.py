@@ -1,5 +1,5 @@
-# src/api/routes/twilio_media.py
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from twilio.twiml.voice_response import VoiceResponse
 import json
 import base64
 import os
@@ -8,12 +8,28 @@ from src.services.asr_service import transcribe_audio
 from src.services.nlu_service import analyze_text
 from src.services.tts_service import synthesize_speech
 from src.services.audio_storage import store_audio_file
+from dotenv import load_dotenv
+
+# Lade Umgebungsvariablen
+load_dotenv()
 
 router = APIRouter()
 
+# Umgebungsvariablen
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+NGROK_URL = os.getenv("NGROK_URL")
 
+# Neuer TwiML-Endpunkt
+@router.post("/twilio/outbound")
+async def twilio_outbound():
+    response = VoiceResponse()
+    response.say("Hallo! Ich bin dein KI-Assistent.", voice="Polly.Hans", language="de-DE")
+    # Verlinkt den WebSocket für Medienströme
+    response.connect().stream(url=f"wss://{NGROK_URL.split('https://')[1]}/ws/twilio-media/")
+    return str(response)
+
+# Bestehender WebSocket-Endpunkt
 @router.websocket("/ws/twilio-media/")
 async def twilio_media_ws(websocket: WebSocket):
     await websocket.accept()
@@ -34,8 +50,8 @@ async def twilio_media_ws(websocket: WebSocket):
             elif event == "media":
                 payload = msg.get("media", {}).get("payload", "")
                 audio_bytes = base64.b64decode(payload)
-                transcription = await transcribe_chunk(audio_bytes)  # Sofort transkribieren
-                print(f"Teiltranskription: {transcription}")
+                # Optional: Teiltranskription hier möglich
+                audio_chunks.append(audio_bytes)  # Sammle Chunks
 
             elif event == "stop":
                 print("Media Stream beendet:", msg)
@@ -56,7 +72,7 @@ async def twilio_media_ws(websocket: WebSocket):
                 # Twilio-Update
                 if call_sid:
                     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-                    new_url = f"https://<deine-ngrok-domain>.ngrok-free.app/twilio/play_audio/{audio_id}"
+                    new_url = f"{NGROK_URL}/twilio/play_audio/{audio_id}"
                     client.calls(call_sid).update(url=new_url, method="POST")
                 break
 

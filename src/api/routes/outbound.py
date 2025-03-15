@@ -1,24 +1,22 @@
-# src/api/routes/outbound.py
+from twilio.rest import Client
+import os
+from dotenv import load_dotenv
 
-from fastapi import APIRouter
-from fastapi.responses import Response
-from twilio.twiml.voice_response import VoiceResponse, Start, Stream
+load_dotenv()
 
-router = APIRouter()
+account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+twilio_number = os.getenv("TWILIO_NUMBER")
+test_number = os.getenv("TEST_NUMBER")
+ngrok_url = os.getenv("NGROK_URL")
 
-@router.post("/twilio/outbound")
-async def twilio_outbound():
-    """
-    Twilio ruft diesen Endpunkt, sobald der ausgehende Anruf 
-    vom Angerufenen angenommen wird.
-    """
-    response = VoiceResponse()
+client = Client(account_sid, auth_token)
 
-    # <Start><Stream> für Media Streams
-    start = Start()
-    # Ersetze <deine-ngrok-domain> durch den aktiven ngrok-Link
-    start.append(Stream(url="wss://ab39-185-115-7-111.ngrok-free.app/ws/twilio-media/"))
-    response.append(start)
+call = client.calls.create(
+    from_=twilio_number,
+    to=test_number,
+    url=f"{ngrok_url}/twilio/outbound",
+    method="POST"
+)
 
-    response.say("Hallo! Ich bin dein KI-Assistent. Bitte sag mir, was du brauchst.")
-    return Response(str(response), media_type="application/xml")
+print("Call SID:", call.sid)

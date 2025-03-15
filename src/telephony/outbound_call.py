@@ -9,7 +9,7 @@ client = Client(account_sid, auth_token)
 call = client.calls.create(
     from_="+12566009667",  # Deine verifizierte Twilio-Nummer
     to="+995599884923",    # Die Zielnummer, die du anrufen willst
-    url="https://ab39-185-115-7-111.ngrok-free.app/twilio/outbound",
+    url="https://a0e3-217-110-11-18.ngrok-free.app/twilio/outbound",
     method="POST"
 )
 
